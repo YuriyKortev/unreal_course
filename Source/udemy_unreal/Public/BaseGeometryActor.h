@@ -8,6 +8,28 @@
 
 #include "BaseGeometryActor.generated.h"
 
+UENUM(BlueprintType)
+enum class EMovementType : uint8
+{
+	Sin,
+	Static
+};
+
+USTRUCT(BlueprintType)
+struct FGeometryData {
+	GENERATED_USTRUCT_BODY()
+
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float ampl = 50.f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float freq = 2.f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	EMovementType move_type = EMovementType::Static;
+};
+
 UCLASS()
 class UDEMY_UNREAL_API ABaseGeometryActor : public AActor
 {
@@ -17,18 +39,15 @@ public:
 	// Sets default values for this actor's properties
 	ABaseGeometryActor();
 
-	UPROPERTY(VisibleAnywhere);
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float ampl = 50.f;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float freq = 2.f;
+	UPROPERTY(EditAnywhere, Category = "Geometry Data")
+	FGeometryData geo_data;
 
 	UPROPERTY(EditAnywhere, Category = "Stats")
 	int32 num_of_kills = 4;
@@ -58,4 +77,6 @@ private:
 	void print_types();
 	void print_str_stats();
 	void print_transform();
+
+	void movement();
 };

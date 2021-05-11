@@ -33,11 +33,8 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector cur_loc = GetActorLocation();
-	float time = GetWorld()->GetTimeSeconds();
-	cur_loc.Z = init_loc.Z + ampl * FMath::Sin(freq * time);
+	movement();
 
-	SetActorLocation(cur_loc);
 }
 
 void ABaseGeometryActor::print_types()
@@ -81,5 +78,30 @@ void ABaseGeometryActor::print_transform()
 	UE_LOG(LogBaseGeometry, Warning, TEXT("Scale: %s"), *sc.ToString());
 
 	UE_LOG(LogBaseGeometry, Error, TEXT("Human transform: %s"), *tr.ToHumanReadableString());
+}
+
+void ABaseGeometryActor::movement()
+{
+	FVector cur_loc = GetActorLocation();
+	float time = GetWorld()->GetTimeSeconds();
+
+	switch (geo_data.move_type)
+	{
+	case EMovementType::Sin:
+	{
+		cur_loc.Z = init_loc.Z + geo_data.ampl * FMath::Sin(geo_data.freq * time);
+		SetActorLocation(cur_loc);
+	}
+	break;
+
+	case EMovementType::Static:
+	{
+
+	}
+	break;
+
+	default: break;
+
+	}
 }
 
