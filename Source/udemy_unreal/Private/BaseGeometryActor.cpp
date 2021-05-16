@@ -65,8 +65,10 @@ void ABaseGeometryActor::print_str_stats()
 	FString stats = FString::Printf(TEXT("--------Actor's stats-------\n%s\n%s\n%s\n"), *num_of_kills_str, *is_dead_str, *hp_str);
 	UE_LOG(LogBaseGeometry, Display, TEXT("%s"), *stats);
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, name);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, stats, true, FVector2D(1.5f, 1.5f));
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Blue, name);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, stats, true, FVector2D(1.5f, 1.5f));
+	}
 }
 
 void ABaseGeometryActor::print_transform()
@@ -88,6 +90,9 @@ void ABaseGeometryActor::print_transform()
 
 void ABaseGeometryActor::movement()
 {
+	if (!GetWorld())
+		return;
+
 	FVector cur_loc = GetActorLocation();
 	float time = GetWorld()->GetTimeSeconds();
 
@@ -113,6 +118,9 @@ void ABaseGeometryActor::movement()
 
 void ABaseGeometryActor::SetColor(const FLinearColor& Color)
 {
+	if (!BaseMesh)
+		return;
+
 	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
 
 	if (DynMaterial) {
