@@ -34,6 +34,13 @@ void ABaseGeometryActor::BeginPlay()
 	// print_types();
 }
 
+void ABaseGeometryActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	UE_LOG(LogBaseGeometry, Warning, TEXT("Actor destroyed: %s"), *GetName());
+
+	Super::EndPlay(EndPlayReason);
+}
+
 // Called every frame
 void ABaseGeometryActor::Tick(float DeltaTime)
 {
@@ -133,11 +140,13 @@ void ABaseGeometryActor::OnTimerFired()
 	if (++TimerCount > MaxTimerCount) {
 		UE_LOG(LogBaseGeometry, Warning, TEXT("Timer stopped"))
 		GetWorldTimerManager().ClearTimer(TH);
+		OnTimerFinished.Broadcast(this);
 		return;
 	}
 
 	const FLinearColor NewColor = FLinearColor::MakeRandomColor();
 	UE_LOG(LogBaseGeometry, Display, TEXT("Color set to - %s"), *NewColor.ToString())
 	SetColor(NewColor);
+	OnColorChanged.Broadcast(NewColor, GetName());
 }
 

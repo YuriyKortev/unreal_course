@@ -4,6 +4,8 @@
 #include "BaseGeometryHubActor.h"
 #include "Engine/World.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogGeometryHub, All, All)
+
 // Sets default values
 ABaseGeometryHubActor::ABaseGeometryHubActor()
 {
@@ -17,8 +19,8 @@ void ABaseGeometryHubActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnRandomMovement();
-	SpawnRandomColor();
+	// SpawnRandomMovement();
+	// SpawnRandomColor();
 	SpawnPayloads();
 	
 }
@@ -64,10 +66,35 @@ void ABaseGeometryHubActor::SpawnPayloads()
 			ABaseGeometryActor* Geometry = World->SpawnActorDeferred<ABaseGeometryActor>(PayLoad.GeometryClass, PayLoad.InitialTransform);
 			if (Geometry) {
 				Geometry->SetGeometryData(PayLoad.Data);
+				Geometry->OnColorChanged.AddDynamic(this, &ABaseGeometryHubActor::OnColorChanged);
+				Geometry->OnTimerFinished.AddUObject(this, &ABaseGeometryHubActor::OnTimerFinished);
 				Geometry->FinishSpawning(PayLoad.InitialTransform);
 			}
 		}
 	}
+}
+
+void ABaseGeometryHubActor::OnColorChanged(const FLinearColor& Color, const FString& Name)
+{
+	UE_LOG(LogGeometryHub, Warning, TEXT("Actor name: %s, Color: %s"), *Name, *Color.ToString());
+}
+
+void ABaseGeometryHubActor::OnTimerFinished(AActor* Actor)
+{
+	if (!Actor)
+		return;
+
+	UE_LOG(LogGeometryHub, Error, TEXT("Timer finished: %s"), *Actor->GetName());
+
+	ABaseGeometryActor* Geometry = Cast<ABaseGeometryActor>(Actor);
+
+	if (!Geometry)
+		return;
+
+	UE_LOG(LogGeometryHub, Display, TEXT("Cast finished, Object ampl: %f"), Geometry->GetGeometryData().ampl);
+
+	// Geometry->SetLifeSpan(2.f);
+	Geometry->Destroy();
 }
 
 // Called every frame

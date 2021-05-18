@@ -52,6 +52,10 @@ protected:
 	void SpawnRandomColor();
 	void SpawnPayloads();
 
+	UFUNCTION()
+	void OnColorChanged(const FLinearColor& Color, const FString& Name);
+	void OnTimerFinished(AActor* Actor);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
