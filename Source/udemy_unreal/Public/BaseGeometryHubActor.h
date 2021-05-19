@@ -48,8 +48,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<FGeometryPayload> GeometryPayloads;
 
-	void SpawnRandomMovement();
-	void SpawnRandomColor();
+	void SpawnRandomMovement() const;
+	void SpawnRandomColor() const;
 	void SpawnPayloads();
 
 	UFUNCTION()

@@ -13,5 +13,6 @@ UCLASS()
 class UDEMY_UNREAL_API Audemy_unrealGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+	Audemy_unrealGameModeBase();
 };

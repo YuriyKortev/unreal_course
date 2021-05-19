@@ -25,7 +25,7 @@ void ABaseGeometryHubActor::BeginPlay()
 	
 }
 
-void ABaseGeometryHubActor::SpawnRandomMovement()
+void ABaseGeometryHubActor::SpawnRandomMovement() const
 {
 	UWorld* World = GetWorld();
 	if (World) {
@@ -41,7 +41,7 @@ void ABaseGeometryHubActor::SpawnRandomMovement()
 	}
 }
 
-void ABaseGeometryHubActor::SpawnRandomColor()
+void ABaseGeometryHubActor::SpawnRandomColor() const
 {
 	UWorld* World = GetWorld();
 	if (World) {
